@@ -1,0 +1,32 @@
+
+name: CI - Build & Test & Run
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-test-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+
+      - name: Build & Test
+        run: mvn -B clean verify
+
+      - name: Package fat JAR
+        run: mvn -B package
+
+      - name: Run the app
+        run: java -jar target/simple-java-app-1.0.0-shaded.jar
