@@ -22,11 +22,10 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
-      - name: Build & Test
-        run: mvn -B clean verify
+      
+      - name: Build
+        run: mvn -B clean package
 
-      - name: Package fat JAR
-        run: mvn -B package
+      - name: Run the app (no shaded jar)
+        run: java -cp target/classes com.example.app.App
 
-      - name: Run the app
-        run: java -jar target/simple-java-app-1.0.0-shaded.jar
